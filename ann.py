@@ -158,3 +158,27 @@ new_pred[:, 7] = labelencoder5.transform(new_pred[:, 7])
 
 new_prediction = model.predict(sc.transform(new_pred))
 new_prediction = np.argmax(new_prediction,axis=1)#0 = setosa 1 = versicolor 2 = virginica
+
+
+# serialize model to JSON
+model_json = model.to_json()
+with open("model.json", "w") as json_file:
+    json_file.write(model_json)
+# serialize weights to HDF5
+model.save_weights("model.h5")
+print("Saved model to disk")
+
+# later...
+
+from keras.models import model_from_json
+
+# load json and create model
+json_file = open('model.json', 'r')
+loaded_model_json = json_file.read()
+json_file.close()
+loaded_model = model_from_json(loaded_model_json)
+# load weights into new model
+loaded_model.load_weights("model.h5")
+print("Loaded model from disk")
+
+new_prediction = loaded_model.predict(sc.transform(new_pred))
