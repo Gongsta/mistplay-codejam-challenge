@@ -129,6 +129,8 @@ y_pred = model.predict(X_test)
 
 y_pred = np.argmax(y_pred,axis=1)#0 = setosa 1 = versicolor 2 = virginica
 
+
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 labelencoder = LabelEncoder()
 X[:, 2] = X[:, 2].astype('str')
 X[:, 2] = labelencoder.fit_transform(X[:, 2])
@@ -156,10 +158,8 @@ new_pred[:, 7] = new_pred[:, 7].astype('str')
 new_pred[:, 7] = labelencoder5.transform(new_pred[:, 7])
 
 
-new_prediction = model.predict(sc.transform(new_pred))
-new_prediction = np.argmax(new_prediction,axis=1)#0 = setosa 1 = versicolor 2 = virginica
 
-
+"""
 # serialize model to JSON
 model_json = model.to_json()
 with open("model.json", "w") as json_file:
@@ -167,7 +167,7 @@ with open("model.json", "w") as json_file:
 # serialize weights to HDF5
 model.save_weights("model.h5")
 print("Saved model to disk")
-
+"""
 # later...
 
 from keras.models import model_from_json
@@ -182,3 +182,6 @@ loaded_model.load_weights("model.h5")
 print("Loaded model from disk")
 
 new_prediction = loaded_model.predict(sc.transform(new_pred))
+
+new_prediction = model.predict(sc.transform(new_pred))
+new_prediction = np.argmax(new_prediction,axis=1)#0 = setosa 1 = versicolor 2 = virginica
